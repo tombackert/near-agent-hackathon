@@ -1,0 +1,91 @@
+{
+    "title": "Best Italian Car Maker",
+    "introduction": "Join us in determining the top Italian car manufacturer. Your opinion matters!",
+    "questions": [
+        {
+            "question": "Which brand do you prefer?",
+            "options": [
+                {
+                    "option": "Ferrari"
+                },
+                {
+                    "option": "Lamborghini"
+                },
+                {
+                    "option": "Alfa Romeo"
+                },
+                {
+                    "option": "Maserati"
+                }
+            ]
+        },
+        {
+            "question": "What do you value most?",
+            "options": [
+                {
+                    "option": "Performance"
+                },
+                {
+                    "option": "Design"
+                },
+                {
+                    "option": "Heritage"
+                },
+                {
+                    "option": "Technology"
+                }
+            ]
+        },
+        {
+            "question": "Which model is the best?",
+            "options": [
+                {
+                    "option": "Ferrari 488"
+                },
+                {
+                    "option": "Lamborghini Huracan"
+                },
+                {
+                    "option": "Alfa Romeo Giulia"
+                },
+                {
+                    "option": "Maserati Alfieri"
+                }
+            ]
+        },
+        {
+            "question": "Preferred type of car?",
+            "options": [
+                {
+                    "option": "Supercar"
+                },
+                {
+                    "option": "Sports car"
+                },
+                {
+                    "option": "Sedan"
+                },
+                {
+                    "option": "Compact"
+                }
+            ]
+        },
+        {
+            "question": "What influence does Italian heritage have on your choice?",
+            "options": [
+                {
+                    "option": "Highly Influential"
+                },
+                {
+                    "option": "Somewhat Influential"
+                },
+                {
+                    "option": "Not Influential"
+                },
+                {
+                    "option": "I don't consider it"
+                }
+            ]
+        }
+    ]
+}

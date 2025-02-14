@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
+import json
 
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
@@ -108,6 +109,20 @@ def edit_survey(survey: str, modifications) -> str:
       print(f"An error occurred during update: {e}")
             
     return survey
+  
+
+def save_survey(survey: str, filename: str):
+  """Parses the survey JSON string and saves it in a compact format (without newline characters)."""
+  try:
+      survey_dict = json.loads(survey)
+  except Exception as e:
+      print("Error parsing survey JSON:", e)
+      return
+
+  with open(filename, "w") as f:
+      json.dump(survey_dict, f, separators=(',', ':'))
+
+
 
 def run_survey_generator():
   """Runs the survey generator and enables post-generation edits."""
@@ -117,6 +132,7 @@ def run_survey_generator():
   topic = input("Enter survey topic: ").strip()
   print("Generating survey...")
   survey = generate_survey(topic)
+  save_survey(survey, "survey.json")
   
   print("\n" + " Start of Generated Survey ".center(100, "=") + "\n")
   print(survey)
@@ -128,13 +144,16 @@ def run_survey_generator():
       modifications = input("Enter modifications: ").strip()
       print("Updating survey...")
       survey = edit_survey(survey, modifications)
+      save_survey(survey, "survey.json")
 
       print("\n" + " Start of Generated Survey ".center(100, "=") + "\n")
       print(survey)
       print("\n" + " End of Generated Survey ".center(100, "=") + "\n")
     elif edit_choice in ["no", "n"]:
       print("User wants no further edits")
+      save_survey(survey, "survey.json")
       print("Exiting generator..." + "\n")
+      
       break
 
 if __name__ == "__main__":
