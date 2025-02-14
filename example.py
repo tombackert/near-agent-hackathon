@@ -2,12 +2,26 @@ import openai
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+from pydantic import BaseModel
 
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 openai.api_key = api_key
 
 client = OpenAI()
+
+class Option(BaseModel):
+  option: str
+
+class Item(BaseModel):
+  question: str
+  options: list[Option]
+class Survey(BaseModel):
+  title: str
+  introduction: str
+  questions: list[Item]
+
+
 
 def generate_survey(topic: str) -> str:
   """Generates a survey based on a fixed template and user topic."""
@@ -19,7 +33,7 @@ def generate_survey(topic: str) -> str:
     2. **Introduction:** A brief introduction (1–2 sentences) that introduces the topic.
     3. **Questions:** A list of 3–5 questions. Each question should include three short and concise answer options.
 
-    Please format the output as follows:
+    Ensure to output it strictly in valid JSON format, using the following structure:
 
     Title: <Survey Title>
     Introduction: <Brief introduction>
@@ -35,12 +49,20 @@ def generate_survey(topic: str) -> str:
     ... 
 
     Ensure that all answer options are truly short and concise.
-    """
+    Make sure the output is valid JSON without any additional text.
+  """
+
+  messages = [
+      {"role": "system", "content": prompt},
+      {"role": "user", "content": topic}
+    ]
+
   try:
-    response = client.chat.completions.create(
+    response = client.beta.chat.completions.parse(
       model="gpt-4o-mini",
       store=True,
-      messages=[{"role": "user", "content": prompt}],
+      messages=messages,
+      response_format=Survey,
     )
     survey = response.choices[0].message.content
   except Exception as e:
@@ -65,13 +87,20 @@ def edit_survey(survey: str, modifications) -> str:
 
       {modifications}
 
-      Please output the updated survey in the same format as provided.
+      Ensure to output it strictly in valid JSON format, and structure as provided.
       """
+    
+    messages = [
+      {"role": "system", "content": f" You should update the given survey according to {edit_prompt}"},
+      {"role": "user", "content": edit_prompt}
+    ]
+
     try:
-      response = client.chat.completions.create(
+      response = client.beta.chat.completions.parse(
         model="gpt-4o-mini",
         store=True,
-        messages=[{"role": "user", "content": edit_prompt}],
+        messages=messages,
+        response_format=Survey,
       )
       survey = response.choices[0].message.content
 
