@@ -9,41 +9,45 @@ openai.api_key = api_key
 
 client = OpenAI()
 
-def generate_survey(topic: str) -> str:
-    prompt = f"""
-      Create a survey on the topic "{topic}".
-      The survey should have the following structure:
+def generate_survey(topic: str):
+  """This function generates a survey based on template and user topic."""
+  prompt = f"""
+    Create a survey on the topic "{topic}".
+    The survey should have the following structure:
 
-      1. **Title:** A short, concise title (maximum 5 words).
-      2. **Introduction:** A brief introduction (1–2 sentences) that introduces the topic.
-      3. **Questions:** A list of 3–5 questions. Each question should include three short and concise answer options.
+    1. **Title:** A short, concise title (maximum 5 words).
+    2. **Introduction:** A brief introduction (1–2 sentences) that introduces the topic.
+    3. **Questions:** A list of 3–5 questions. Each question should include three short and concise answer options.
 
-      Please format the output as follows:
+    Please format the output as follows:
 
-      Title: <Survey Title>
-      Introduction: <Brief introduction>
-      Questions:
-      1. Question: <Question 1>
-        - Option 1: <Answer 1>
-        - Option 2: <Answer 2>
-        - Option 3: <Answer 3>
-      2. Question: <Question 2>
-        - Option 1: <Answer 1>
-        - Option 2: <Answer 2>
-        - Option 3: <Answer 3>
-      ... 
+    Title: <Survey Title>
+    
+    Introduction: <Brief introduction>
+    
+    Questions:
+    1. Question: <Question 1>
+      - Option 1: <Answer 1>
+      - Option 2: <Answer 2>
+      - Option 3: <Answer 3>
+    2. Question: <Question 2>
+      - Option 1: <Answer 1>
+      - Option 2: <Answer 2>
+      - Option 3: <Answer 3>
+    ... 
 
-      Ensure that all answer options are truly short and concise.
-      """
+    Ensure that all answer options are truly short and concise.
+    """
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        store=True,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    return response.choices[0].message.content
+  response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    store=True,
+    messages=[{"role": "user", "content": prompt}],
+  )
+  return response.choices[0].message.content
 
-if __name__ == "__main__":
+def run_survey_generator():
+  """This function runs the survey generator."""
   print()
   print(" System Instructions ".center(100, "="))
   print()
@@ -53,7 +57,6 @@ if __name__ == "__main__":
   print("  - A list of 3–5 questions, each with 3 short answer options")
   print()
   print(" Survey Prompt ".center(100, "="))
-
   print()
   topic = input("Please enter the topic for the survey: ")
   print()
@@ -62,4 +65,8 @@ if __name__ == "__main__":
   print()
   print(survey)
   print()
+   
+
+if __name__ == "__main__":
+  run_survey_generator()
   
