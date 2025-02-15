@@ -139,22 +139,16 @@ def run_survey_generator():
   print("\n" + " End of Generated Survey ".center(100, "=") + "\n")
 
   while True:
-    edit_choice = input("Edit survey? (yes/no): ").strip().lower()
-    if edit_choice in ["yes", "y"]:
-      modifications = input("Enter modifications: ").strip()
-      print("Updating survey...")
-      survey = edit_survey(survey, modifications)
-      save_survey(survey, "survey.json")
+    
+    modifications = input("Edit survey: ").strip()
+    print("Updating survey...")
+    survey = edit_survey(survey, modifications)
+    save_survey(survey, "survey.json")
 
-      print("\n" + " Start of Generated Survey ".center(100, "=") + "\n")
-      print(survey)
-      print("\n" + " End of Generated Survey ".center(100, "=") + "\n")
-    elif edit_choice in ["no", "n"]:
-      print("User wants no further edits")
-      save_survey(survey, "survey.json")
-      print("Exiting generator..." + "\n")
-      
-      break
+    print("\n" + " Start of Generated Survey ".center(100, "=") + "\n")
+    print(survey)
+    print("\n" + " End of Generated Survey ".center(100, "=") + "\n")
+    
 
 if __name__ == "__main__":
   run_survey_generator()

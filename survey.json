@@ -1,89 +1,88 @@
 {
-    "title": "Best Italian Car Maker",
-    "introduction": "Join us in determining the top Italian car manufacturer. Your opinion matters!",
+    "title": "Best Cars Ever Made",
+    "introduction": "Help us identify the best cars in automotive history. Your opinions matter!",
     "questions": [
         {
-            "question": "Which brand do you prefer?",
+            "question": "Which car do you consider the best sports car?",
             "options": [
                 {
-                    "option": "Ferrari"
+                    "option": "Porsche 911"
                 },
                 {
-                    "option": "Lamborghini"
+                    "option": "Ferrari F40"
                 },
                 {
-                    "option": "Alfa Romeo"
-                },
-                {
-                    "option": "Maserati"
+                    "option": "McLaren F1"
                 }
             ]
         },
         {
-            "question": "What do you value most?",
+            "question": "What is the best luxury car ever made?",
             "options": [
                 {
-                    "option": "Performance"
+                    "option": "Rolls-Royce Phantom"
                 },
                 {
-                    "option": "Design"
+                    "option": "Mercedes-Benz S-Class"
                 },
                 {
-                    "option": "Heritage"
-                },
-                {
-                    "option": "Technology"
+                    "option": "Bentley Continental GT"
                 }
             ]
         },
         {
-            "question": "Which model is the best?",
+            "question": "Which classic car is your favorite?",
             "options": [
                 {
-                    "option": "Ferrari 488"
+                    "option": "Ford Mustang"
                 },
                 {
-                    "option": "Lamborghini Huracan"
+                    "option": "Chevrolet Corvette"
+                },
+                {
+                    "option": "Jaguar E-Type"
+                }
+            ]
+        },
+        {
+            "question": "What is the best electric vehicle?",
+            "options": [
+                {
+                    "option": "Tesla Model S"
+                },
+                {
+                    "option": "Nissan Leaf"
+                },
+                {
+                    "option": "Ford Mustang Mach-E"
+                }
+            ]
+        },
+        {
+            "question": "Which car has the best design?",
+            "options": [
+                {
+                    "option": "Jaguar XK120"
                 },
                 {
                     "option": "Alfa Romeo Giulia"
                 },
                 {
-                    "option": "Maserati Alfieri"
+                    "option": "Aston Martin DB5"
                 }
             ]
         },
         {
-            "question": "Preferred type of car?",
+            "question": "What is the most innovative car of all time?",
             "options": [
                 {
-                    "option": "Supercar"
+                    "option": "Toyota Prius"
                 },
                 {
-                    "option": "Sports car"
+                    "option": "Tesla Model 3"
                 },
                 {
-                    "option": "Sedan"
-                },
-                {
-                    "option": "Compact"
-                }
-            ]
-        },
-        {
-            "question": "What influence does Italian heritage have on your choice?",
-            "options": [
-                {
-                    "option": "Highly Influential"
-                },
-                {
-                    "option": "Somewhat Influential"
-                },
-                {
-                    "option": "Not Influential"
-                },
-                {
-                    "option": "I don't consider it"
+                    "option": "Ford Model T"
                 }
             ]
         }
