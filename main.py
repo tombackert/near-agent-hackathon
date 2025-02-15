@@ -10,7 +10,9 @@ def main():
         print("\n" + " SURVEY GENERATOR ".center(100, "=") + "\n")
         
         topic = input("Enter survey topic: ").strip()
-        print("Generating survey...")
+        agent.add_to_chat_history("user", topic)
+        agent.add_to_chat_history("assistant", "Generating survey...")
+        print(agent.chat_history[-1]["content"])
         survey = agent.generate_survey(topic)
         agent.save_survey(survey, "survey.json")
         
@@ -21,7 +23,10 @@ def main():
         while True:
             
             modifications = input("Edit survey: ").strip()
-            print("Updating survey...")
+            agent.add_to_chat_history("user", modifications)
+            agent.add_to_chat_history("assistant", "Updating survey...")
+            print(agent.chat_history[-1]["content"])
+
             survey = agent.update_survey(survey, modifications)
             agent.save_survey(survey, "survey.json")
 
@@ -30,8 +35,6 @@ def main():
             print("\n" + " End of Generated Survey ".center(100, "=") + "\n")
 
     run_survey_generator()
-
-
 
 if __name__ == "__main__":
     main()
