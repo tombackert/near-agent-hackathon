@@ -6,8 +6,15 @@ import json
 client = OpenAI()
 
 class SurveyAgent:
+    
     def __init__(self):
         self.surveys = []
+        self.chat_history = []
+
+    def add_to_chat_history(self, role:str , content: str):
+        """Adds a message to the chat history."""
+        self.chat_history.append({"role": role, "content": content})
+        self.save_chat_history("chat_history.json")
 
     def generate_survey(self, topic: str) -> Survey:
         """
@@ -46,6 +53,7 @@ class SurveyAgent:
                 response_format=Survey,
             )
             survey = response.choices[0].message.content
+            self.add_to_chat_history("assistant",json.loads(survey))
             
             return survey
         except Exception as e:
@@ -77,6 +85,7 @@ class SurveyAgent:
                 response_format=Survey,
             )
             updated_survey = response.choices[0].message.content
+            self.add_to_chat_history("assistant", json.loads(updated_survey))
             
             return updated_survey
         except Exception as e:
@@ -96,3 +105,13 @@ class SurveyAgent:
 
         with open(filename, "w") as f:
             json.dump(survey_dict, f, separators=(',', ':'))
+    
+    
+    def save_chat_history(self, filename: str):
+        """Saves the chat history in JSON format."""
+        try:
+            with open(filename, "w") as f:
+                json.dump(self.chat_history, f, separators=(',', ':'))
+        except Exception as e:
+            print("Error saving chat history JSON:", e)
+        
