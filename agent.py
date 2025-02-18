@@ -13,9 +13,10 @@ from survey import Survey
 
 client = OpenAI()
 
+
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-MY_SPREADSHEET_ID = "1vi8yPHNMTOBF6NtuqniwoN42juEfzgzF4M1i4N7NElA"
-MY_RANGE_NAME = "Formularantworten 1!A:C"
+MY_SPREADSHEET_ID = "1Vb6tEHacv_DCs8OgtWt-x0k_M57zXrFt1A16ptHKLPE"
+MY_RANGE_NAME = "Formularantworten 1!A:F"
 
 class SurveyAgent:
     
@@ -125,18 +126,23 @@ class SurveyAgent:
             print("Error saving chat history JSON:", e)
     
     
-    def fetch_and_aggregate_responses(self, survey_title: str, survey_description: str) -> dict:
+    def fetch_and_aggregate_responses(self, scopes, spreadsheet_id, range_def) -> dict:
         """
         Fetch responses from the Google Sheet, aggregate them, and return the data in the desired format.
         """
+        with open("survey.json", "r") as f:
+            survey_data = json.load(f)
+        survey_title = survey_data.get("title", "")
+        survey_description = survey_data.get("introduction", "")
+
         creds = None
         if os.path.exists("token.json"):
-            creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+            creds = Credentials.from_authorized_user_file("token.json", scopes)
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+                flow = InstalledAppFlow.from_client_secrets_file("credentials.json", scopes)
                 creds = flow.run_local_server(port=0)
             with open("token.json", "w") as token:
                 token.write(creds.to_json())
@@ -144,8 +150,8 @@ class SurveyAgent:
             service = build("sheets", "v4", credentials=creds)
             sheet = service.spreadsheets()
             result = sheet.values().get(
-                spreadsheetId=MY_SPREADSHEET_ID,
-                range=MY_RANGE_NAME
+                spreadsheetId=spreadsheet_id,
+                range=range_def
             ).execute()
             rows = result.get("values", [])
             if not rows:
@@ -202,5 +208,53 @@ class SurveyAgent:
             "questions": analysis_list
         }
     
-    def analyze_survey(self, survey: dict) -> dict:
-        pass
+    def generate_survey_analysis(self) -> str:
+        """
+        Generates an analysis of the survey responses using LLM.
+        """
+        
+        results = self.fetch_and_aggregate_responses(SCOPES, MY_SPREADSHEET_ID, MY_RANGE_NAME)
+        with open("survey.json", "r") as f:
+            survey = json.load(f)
+
+        prompt = f"""
+            You are an expert data analyst. Below you are provided with two sections:
+
+            1. Survey:
+            {str(survey)}
+
+            2. Aggregated Survey Responses:
+            {str(results)}
+
+            Your task is to create an executive summary. First, provide a concise overview of the aggregated data, highlighting key statistics such as response counts, most common answers, and the distribution of responses per question. Then, analyze the data to identify significant trends, patterns, and anomalies. Discuss what these findings might imply for the underlying survey topic and provide any insights you deem relevant. Use the Questions and Answer Options from {Survey} as references to the aggregated responses when unclear. Make the analysis sound not too technical but informative. Make it short. Make it fun to read.
+
+            Please structure your response in two sections:
+            - "Overview": A brief summary of the key numbers and distributions.
+            - "Analysis": A detailed discussion of trends and patterns
+
+            Output your response in a structured format and in the language of in which the survey is written."""
+        
+        messages = [
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": str(results)}
+        ]
+
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                store=True,
+                messages=messages,
+            )
+            return response.choices[0].message.content
+        
+        except Exception as e:
+            print(f"An error occurred during survey analysis generation: {e}")
+            return None
+        
+    def save_analysis(self, analysis: str, filename: str):
+        """Saves the survey analysis in JSON format."""
+        try:
+            with open(filename, "w") as f:
+                json.dump(analysis, f, indent=2)
+        except Exception as e:
+            print("Error saving survey analysis JSON:", e)

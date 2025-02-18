@@ -1,7 +1,9 @@
+from agent import SurveyAgent
+import json
+
 def main():
     """Entry point for the survey agent application."""
-    from agent import SurveyAgent
-
+    
     agent = SurveyAgent()
 
     def run_survey_generator():
@@ -34,7 +36,26 @@ def main():
             print(survey)
             print("\n" + " End of Generated Survey ".center(100, "=") + "\n")
 
-    run_survey_generator()
+    def run_survey_analysis():
+        """Runs the survey analysis tool."""
+        print("\n" + " SURVEY ANALYSIS ".center(100, "=") + "\n")
+
+        print("Fetching survey data...")
+        print("Analyzing survey data...")
+        analysis = agent.generate_survey_analysis()
+        agent.save_analysis(analysis, "analysis.json")
+
+        formatted_output = analysis.replace("\\n", "\n")
+
+
+        print("\n" + " Survey Analysis ".center(100, "=") + "\n")
+        print(formatted_output)
+        print("\n" + " End of Survey Analysis ".center(100, "=") + "\n")
+
+
+    ####
+    #run_survey_generator()
+    run_survey_analysis()
 
 if __name__ == "__main__":
     main()
