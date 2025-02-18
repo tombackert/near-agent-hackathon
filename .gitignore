@@ -1,1 +1,5 @@
 /.env
+/credentials.json
+/token.json
+/chat_history.json
+/survey.json
